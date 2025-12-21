@@ -1,27 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            font-size: 3rem;
-            color: #333;
-        }
-    </style>
+    <title>LA-STREET-SWEEPING</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Hello World</h1>
-    <h2>Welcome to the Homepage</h2>
+    <div class="header">
+        <h1>LA STREET CLEANING</h1>
+        <p>set reminders for cleaning schedules</p>
+        <button class="menu-button" id="menu-toggle">  ☰  </button>
+    </div>
+
+    <div id="map"> </div>
+    <script src="app.js"></script>
+    
 </body>
+
 </html>
