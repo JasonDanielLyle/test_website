@@ -88,7 +88,7 @@ body:has(.sidebar.active) .menu-icon {
   pointer-events: none;
 }
 
-/* --- Sidebar --- */
+/* --- 5. Sidebar Navigation --- */
 .sidebar {
   height: 100%;
   width: 280px;
@@ -109,40 +109,80 @@ body:has(.sidebar.active) .menu-icon {
   left: 0;
 }
 
-.sidebar-header {
-  padding: 1.25rem;
-  background: #4A5BC4;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: max(1.25rem, calc(env(safe-area-inset-top) + 0.5rem));
-}
-
 .sidebar-links {
   list-style: none;
-  padding: 1.25rem;
+  padding: 0; 
   margin: 0;
+  padding-top: 1rem;
 }
 
+.sidebar-links li {
+  border-bottom: 1px solid #eee;
+}
+
+/* Hover & Active States for About/Disclaimer */
+.sidebar-links li:hover,
+.sidebar-links button:hover {
+  background-color: #333; /* Dark gray background */
+  color: #fff;            /* White text for contrast */
+}
+
+/* Base button/link styling */
 .sidebar-links li, .sidebar-links button {
-  min-height: 44px;
+  min-height: 48px;       /* Standard touch target height */
   display: flex;
   align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #eee;
+  padding: 0.5rem 1.25rem; /* Reduced vertical gap, kept horizontal space */
   cursor: pointer;
   font-weight: 500;
   background: none;
   border: none;
-  color: inherit;
+  color: #333;            /* Default text color */
   font: inherit;
   width: 100%;
   text-align: left;
+  transition: background-color 0.2s, color 0.2s;
+  box-sizing: border-box;
 }
 
-.sidebar-links li:active, .sidebar-links button:active {
-  background-color: rgba(74, 91, 196, 0.1);
+.sidebar-links button:active {
+  background-color: #222; /* Slightly darker on click */
+}
+
+.bmc-item {
+  border-bottom: none !important; /* Remove border for the last item */
+  margin-top: 1rem; /* Separate it slightly from the other links */
+}
+
+.bmc-item a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  border-radius: 8px;
+  margin: 0 10px; /* Slight inset to make it look like a button */
+  transition: all 0.2s ease;
+  background-color: #f4f4f4; /* Subtle light gray base */
+}
+
+.bmc-icon {
+  font-size: 1.4rem;
+  margin-right: 12px;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+}
+
+/* Fun Hover Effect */
+.bmc-item a:hover {
+  background-color: #FFDD00; /* Official Buy Me a Coffee Yellow */
+  color: #000;
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 4px 12px rgba(255, 221, 0, 0.3);
+}
+
+.bmc-item a:active {
+  transform: translateY(0);
 }
 
 /* --- Modals & Overlay --- */

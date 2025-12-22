@@ -32,6 +32,12 @@
             <ul class="sidebar-links">
               <li onclick="openModal('about-modal')">About</li>
               <li onclick="openModal('disclaimer-modal')">Disclaimer</li>
+              <li class="bmc-item">
+                <a href="https://www.buymeacoffee.com/jlyle" target="_blank" rel="noopener">
+                  <span class="bmc-icon">☕</span>
+                  Buy me a coffee
+                </a>
+              </li>
             </ul>
           </div>
           
@@ -41,15 +47,14 @@
             <div class="modal-content">
               <span class="close-modal" onclick="closeModal('about-modal')">&times;</span>
               <h2>About  </h2>
-              <p>This app provides a visual overlay of Los Angeles street sweeping schedules to help residents avoid citations and stay informed about neighborhood maintenance. It was made with the goal of always being free and easy to use. Inspired by the <a href="https://sf-street-cleaning.kaushalpartani.com/"> SF Street Cleaning Map</a> by Kaushal Partani.</p>
+              <p>Hi! I made this visual overlay of Los Angeles street sweeping schedules to help residents avoid citations and stay informed about neighborhood maintenance. Select a neighborhood, select your street, and add reminders right to your calendar! <br> <br> I will be adding more streets and neighborhoods as I have time. </p>
             </div>
           </div>
-          
           <div id="disclaimer-modal" class="modal">
             <div class="modal-content">
               <span class="close-modal" onclick="closeModal('disclaimer-modal')">&times;</span>
               <h2>Disclaimer</h2>
-              <p>Data is sourced from public GeoJSON records. While we strive for accuracy, schedules can change due to holidays, weather, or city updates. Always check posted street signs as the primary source of truth.</p>
+              <p>Data is sourced from public GeoJSON records. While the goal is accurate information, schedules can change due to holidays, weather, or city updates. Always check posted street signs as the primary source of truth.</p>
             </div>
           </div>
     </div>
