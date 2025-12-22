@@ -52,3 +52,116 @@ body {
   /* REMOVE fixed height, let grid handle it */
   width: 100%;
 }
+
+/* Hamburger Menu Icon */
+.menu-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2000;
+  cursor: pointer;
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 5px 0;
+  transition: 0.4s;
+}
+
+/* Sidebar */
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 3000;
+  top: 0;
+  left: -250px; /* Hidden by default */
+  background-color: #fff;
+  overflow-x: hidden;
+  transition: 0.3s;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+.sidebar.active {
+  left: 0;
+}
+.sidebar-header {
+  padding: 20px;
+  background: #4A5BC4;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sidebar-links {
+  list-style: none;
+  padding: 20px;
+}
+.sidebar-links li {
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-weight: 500;
+}
+.sidebar-links li:hover {
+  color: #4A5BC4;
+}
+
+/* Modals */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 4000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 30px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+}
+
+.close-modal, .close-sidebar {
+  /* Add these three lines */
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  
+  /* Keep your existing styles */
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333; /* Optional: makes the 'x' a bit darker */
+}
+
+/* Optional: Add a hover effect to make it feel more interactive */
+.close-modal:hover {
+  color: #6b6868;
+}
+
+
+/* Background Overlay */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.2);
+  z-index: 2500;
+}
+.overlay.active {
+  display: block;
+}

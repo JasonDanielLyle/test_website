@@ -4,7 +4,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "S. La Jolla Ave"
+        "name": "S. La Jolla Ave",
+        "east_schedule": "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "west_schedule" : "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -63,7 +65,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Lindenhurst Ave."
+        "name": "Lindenhurst Ave.",
+         "south_schedule": "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+         "north_schedule" : "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -86,7 +90,10 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Maryland Dr"
+        "name": "Maryland Dr",
+        "south_schedule": "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "north_schedule" : "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
+        
       },
       "geometry": {
         "coordinates": [
@@ -105,7 +112,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "West 5th Street"
+        "name": "West 5th Street",
+        "south_schedule": "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "north_schedule" : "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -128,7 +137,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Drexel Ave."
+        "name": "Drexel Ave.",
+        "south_schedule": "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "north_schedule" : "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -151,7 +162,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Colgate Ave."
+        "name": "Colgate Ave.",
+        "south_schedule": "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "north_schedule" : "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -174,7 +187,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "W. 4th Street."
+        "name": "W. 4th Street.",
+        "south_schedule": "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "north_schedule" : "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -193,7 +208,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Blackburn Ave."
+        "name": "Blackburn Ave.",
+        "south_schedule": "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "north_schedule" : "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -209,48 +226,13 @@
         "type": "LineString"
       }
     },
+
     {
       "type": "Feature",
       "properties": {
-        "name": "W. 3rd Street"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -118.36154941465715,
-            34.07152374700314
-          ],
-          [
-            -118.37629614702348,
-            34.07338173854984
-          ]
-        ],
-        "type": "LineString"
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "S. Fairfax Ave."
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -118.36150500907388,
-            34.0715624457323
-          ],
-          [
-            -118.36141762945137,
-            34.063125744258244
-          ]
-        ],
-        "type": "LineString"
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "S. Crescent Heights Blvd."
+        "name": "S. Crescent Heights Blvd.",
+        "east_schedule": "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "west_schedule" : "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -309,7 +291,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "S. Edinburgh Ave."
+        "name": "S. Edinburgh Ave.",
+        "east_schedule": "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "west_schedule" : "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -340,7 +324,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "S. Sweetzer Ave"
+        "name": "S. Sweetzer Ave",
+         "east_schedule": "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "west_schedule" : "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -359,7 +345,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "S. Orlando Ave"
+        "name": "S. Orlando Ave",
+        "east_schedule": "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+        "west_schedule" : "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -375,52 +363,7 @@
         "type": "LineString"
       }
     },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "N. La Cienega Blvd"
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -118.37636276409651,
-            34.07340116258207
-          ],
-          [
-            -118.37636276409651,
-            34.07135747123634
-          ]
-        ],
-        "type": "LineString"
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "San Vicente Blvd."
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -118.37634353210714,
-            34.071354170243225
-          ],
-          [
-            -118.37244056073114,
-            34.064836273546106
-          ],
-          [
-            -118.3721179915655,
-            34.06451271897686
-          ],
-          [
-            -118.37189866434043,
-            34.06436055817813
-          ]
-        ],
-        "type": "LineString"
-      }
-    },
+
     {
       "type": "Feature",
       "properties": {
@@ -454,7 +397,9 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "W. 6th Street"
+        "name": "W. 6th Street",
+         "south_schedule": "{\"day\": \"Monday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}",
+         "north_schedule" : "{\"day\": \"Tuesday\", \"week\": \"2nd,4th\", \"start_time\": \"9:00 AM\", \"end_time\": \"12:00 PM\", \"frequency\": \"biweekly\"}"
       },
       "geometry": {
         "coordinates": [
@@ -473,34 +418,6 @@
         ],
         "type": "LineString"
       }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Wilshire Blvd."
-      },
-      "geometry": {
-        "coordinates": [
-          [
-            -118.37188774539207,
-            34.06435559277459
-          ],
-          [
-            -118.3712260442807,
-            34.06408151276821
-          ],
-          [
-            -118.36457752358821,
-            34.06332452528879
-          ],
-          [
-            -118.36139771560794,
-            34.06297023952354
-          ]
-        ],
-        "type": "LineString"
-      },
-      "id": 18
     }
   ]
 }

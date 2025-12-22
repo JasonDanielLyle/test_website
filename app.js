@@ -5,6 +5,42 @@ var streetsLayer;
 var selectedNeighborhood = null;
 
 // ============================================================================
+// SIDEBAR & MODAL LOGIC
+// ============================================================================
+
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+
+  sidebar.classList.toggle("active");
+  overlay.classList.toggle("active");
+}
+
+function openModal(modalId) {
+  // Close sidebar first
+  toggleSidebar();
+  // Open target modal
+  document.getElementById(modalId).style.display = "block";
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
+
+// Close modal if user clicks anywhere outside of the modal content
+window.onclick = function (event) {
+  const aboutModal = document.getElementById("about-modal");
+  const disclaimerModal = document.getElementById("disclaimer-modal");
+
+  if (event.target == aboutModal) {
+    aboutModal.style.display = "none";
+  }
+  if (event.target == disclaimerModal) {
+    disclaimerModal.style.display = "none";
+  }
+};
+
+// ============================================================================
 // GOOGLE CALENDAR FUNCTIONS
 // ============================================================================
 
@@ -355,18 +391,13 @@ function loadNeighborhoodStreets(neighborhoodName) {
       return response.json();
     })
     .then((data) => {
-      // Process each feature to calculate dynamic dates
       data.features.forEach((feature) => {
         const props = feature.properties;
 
-        // Helper function to parse schedule (handles both string and object)
         function parseSchedule(schedule) {
           if (!schedule) return null;
-
-          // If it's a string, try to parse it as JSON
           if (typeof schedule === "string") {
             try {
-              // Remove trailing comma if present
               const cleanedSchedule = schedule.trim().replace(/,\s*$/, "");
               return JSON.parse(cleanedSchedule);
             } catch (e) {
@@ -374,16 +405,13 @@ function loadNeighborhoodStreets(neighborhoodName) {
               return null;
             }
           }
-
-          // If it's already an object, return it
           return schedule;
         }
 
-        // Calculate north side dates
         if (props.north_schedule) {
           const northSchedule = parseSchedule(props.north_schedule);
           if (northSchedule) {
-            props.north_schedule = northSchedule; // Replace string with parsed object
+            props.north_schedule = northSchedule;
             const northDates = calculateNextSweeping(northSchedule);
             props.north_next = northDates.next;
             props.north_until = northDates.until;
@@ -392,7 +420,6 @@ function loadNeighborhoodStreets(neighborhoodName) {
           }
         }
 
-        // Calculate south side dates
         if (props.south_schedule) {
           const southSchedule = parseSchedule(props.south_schedule);
           if (southSchedule) {
@@ -405,7 +432,6 @@ function loadNeighborhoodStreets(neighborhoodName) {
           }
         }
 
-        // Calculate east side dates
         if (props.east_schedule) {
           const eastSchedule = parseSchedule(props.east_schedule);
           if (eastSchedule) {
@@ -418,7 +444,6 @@ function loadNeighborhoodStreets(neighborhoodName) {
           }
         }
 
-        // Calculate west side dates
         if (props.west_schedule) {
           const westSchedule = parseSchedule(props.west_schedule);
           if (westSchedule) {
@@ -432,7 +457,6 @@ function loadNeighborhoodStreets(neighborhoodName) {
         }
       });
 
-      // Create the streets layer
       streetsLayer = L.geoJSON(data, {
         style: function (feature) {
           return {
@@ -449,23 +473,17 @@ function loadNeighborhoodStreets(neighborhoodName) {
 
             var lat = e.latlng.lat.toFixed(6);
             var lng = e.latlng.lng.toFixed(6);
-
             var streetName =
               feature.properties.name ||
               feature.properties.NAME ||
               "Unknown Street";
-
             var props = feature.properties;
-
-            // Build popup sections dynamically based on what's available
             var sections = [];
 
-            // Check for North/South schedule (typical for north-south streets)
+            // North
             if (props.north_next || props.north_schedule) {
               var northNext = props.north_next || "Not available";
               var northUntil = props.north_until || "Not available";
-
-              // Create Google Calendar link if dates are available
               var calendarButton = "";
               if (props.north_next_date && props.north_until_date) {
                 const calendarLink = createGoogleCalendarLink(
@@ -474,53 +492,29 @@ function loadNeighborhoodStreets(neighborhoodName) {
                   props.north_next_date,
                   props.north_until_date
                 );
-                calendarButton = `
-                  <a href="${calendarLink}" target="_blank" 
-                     style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; 
-                            text-decoration: none; padding: 8px 16px; border-radius: 4px; 
-                            font-size: 12px; font-weight: 600; transition: background 0.2s;"
-                     onmouseover="this.style.background='#3a4ba4'"
-                     onmouseout="this.style.background='#4A5BC4'">
-                    📅 Add to Calendar
-                  </a>
-                `;
+                calendarButton = `<a href="${calendarLink}" target="_blank" style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#3a4ba4'" onmouseout="this.style.background='#4A5BC4'">📅 Add to Calendar</a>`;
               }
-
-              sections.push(`
-                <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
-                  <h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">North Side</h4>
-                  <div style="font-size: 13px;">
-                    <strong>Next:</strong> ${northNext}<br>
-                    <strong>Until:</strong> ${northUntil}
-                  </div>
-                  ${
-                    props.north_schedule
-                      ? `
-                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;">
-                      <strong>Pattern:</strong> ${
+              sections.push(
+                `<div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;"><h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">North Side</h4><div style="font-size: 13px;"><strong>Next:</strong> ${northNext}<br><strong>Until:</strong> ${northUntil}</div>${
+                  props.north_schedule
+                    ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;"><strong>Pattern:</strong> ${
                         props.north_schedule.frequency || ""
-                      } - ${props.north_schedule.day || ""} 
-                      ${
+                      } - ${props.north_schedule.day || ""} ${
                         props.north_schedule.week
                           ? "(" + props.north_schedule.week + " week)"
                           : ""
-                      }<br>
-                      <strong>Time:</strong> ${
+                      }<br><strong>Time:</strong> ${
                         props.north_schedule.start_time || ""
-                      } - ${props.north_schedule.end_time || ""}
-                    </div>
-                  `
-                      : ""
-                  }
-                  ${calendarButton}
-                </div>
-              `);
+                      } - ${props.north_schedule.end_time || ""}</div>`
+                    : ""
+                }${calendarButton}</div>`
+              );
             }
 
+            // South
             if (props.south_next || props.south_schedule) {
               var southNext = props.south_next || "Not available";
               var southUntil = props.south_until || "Not available";
-
               var calendarButton = "";
               if (props.south_next_date && props.south_until_date) {
                 const calendarLink = createGoogleCalendarLink(
@@ -529,54 +523,29 @@ function loadNeighborhoodStreets(neighborhoodName) {
                   props.south_next_date,
                   props.south_until_date
                 );
-                calendarButton = `
-                  <a href="${calendarLink}" target="_blank" 
-                     style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; 
-                            text-decoration: none; padding: 8px 16px; border-radius: 4px; 
-                            font-size: 12px; font-weight: 600; transition: background 0.2s;"
-                     onmouseover="this.style.background='#3a4ba4'"
-                     onmouseout="this.style.background='#4A5BC4'">
-                    📅 Add to Calendar
-                  </a>
-                `;
+                calendarButton = `<a href="${calendarLink}" target="_blank" style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#3a4ba4'" onmouseout="this.style.background='#4A5BC4'">📅 Add to Calendar</a>`;
               }
-
-              sections.push(`
-                <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
-                  <h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">South Side</h4>
-                  <div style="font-size: 13px;">
-                    <strong>Next:</strong> ${southNext}<br>
-                    <strong>Until:</strong> ${southUntil}
-                  </div>
-                  ${
-                    props.south_schedule
-                      ? `
-                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;">
-                      <strong>Pattern:</strong> ${
+              sections.push(
+                `<div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;"><h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">South Side</h4><div style="font-size: 13px;"><strong>Next:</strong> ${southNext}<br><strong>Until:</strong> ${southUntil}</div>${
+                  props.south_schedule
+                    ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;"><strong>Pattern:</strong> ${
                         props.south_schedule.frequency || ""
-                      } - ${props.south_schedule.day || ""} 
-                      ${
+                      } - ${props.south_schedule.day || ""} ${
                         props.south_schedule.week
                           ? "(" + props.south_schedule.week + " week)"
                           : ""
-                      }<br>
-                      <strong>Time:</strong> ${
+                      }<br><strong>Time:</strong> ${
                         props.south_schedule.start_time || ""
-                      } - ${props.south_schedule.end_time || ""}
-                    </div>
-                  `
-                      : ""
-                  }
-                  ${calendarButton}
-                </div>
-              `);
+                      } - ${props.south_schedule.end_time || ""}</div>`
+                    : ""
+                }${calendarButton}</div>`
+              );
             }
 
-            // Check for East/West schedule (typical for east-west streets)
+            // East
             if (props.east_next || props.east_schedule) {
               var eastNext = props.east_next || "Not available";
               var eastUntil = props.east_until || "Not available";
-
               var calendarButton = "";
               if (props.east_next_date && props.east_until_date) {
                 const calendarLink = createGoogleCalendarLink(
@@ -585,53 +554,29 @@ function loadNeighborhoodStreets(neighborhoodName) {
                   props.east_next_date,
                   props.east_until_date
                 );
-                calendarButton = `
-                  <a href="${calendarLink}" target="_blank" 
-                     style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; 
-                            text-decoration: none; padding: 8px 16px; border-radius: 4px; 
-                            font-size: 12px; font-weight: 600; transition: background 0.2s;"
-                     onmouseover="this.style.background='#3a4ba4'"
-                     onmouseout="this.style.background='#4A5BC4'">
-                    📅 Add to Calendar
-                  </a>
-                `;
+                calendarButton = `<a href="${calendarLink}" target="_blank" style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#3a4ba4'" onmouseout="this.style.background='#4A5BC4'">📅 Add to Calendar</a>`;
               }
-
-              sections.push(`
-                <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
-                  <h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">East Side</h4>
-                  <div style="font-size: 13px;">
-                    <strong>Next:</strong> ${eastNext}<br>
-                    <strong>Until:</strong> ${eastUntil}
-                  </div>
-                  ${
-                    props.east_schedule
-                      ? `
-                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;">
-                      <strong>Pattern:</strong> ${
+              sections.push(
+                `<div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;"><h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">East Side</h4><div style="font-size: 13px;"><strong>Next:</strong> ${eastNext}<br><strong>Until:</strong> ${eastUntil}</div>${
+                  props.east_schedule
+                    ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;"><strong>Pattern:</strong> ${
                         props.east_schedule.frequency || ""
-                      } - ${props.east_schedule.day || ""} 
-                      ${
+                      } - ${props.east_schedule.day || ""} ${
                         props.east_schedule.week
                           ? "(" + props.east_schedule.week + " week)"
                           : ""
-                      }<br>
-                      <strong>Time:</strong> ${
+                      }<br><strong>Time:</strong> ${
                         props.east_schedule.start_time || ""
-                      } - ${props.east_schedule.end_time || ""}
-                    </div>
-                  `
-                      : ""
-                  }
-                  ${calendarButton}
-                </div>
-              `);
+                      } - ${props.east_schedule.end_time || ""}</div>`
+                    : ""
+                }${calendarButton}</div>`
+              );
             }
 
+            // West
             if (props.west_next || props.west_schedule) {
               var westNext = props.west_next || "Not available";
               var westUntil = props.west_until || "Not available";
-
               var calendarButton = "";
               if (props.west_next_date && props.west_until_date) {
                 const calendarLink = createGoogleCalendarLink(
@@ -640,74 +585,36 @@ function loadNeighborhoodStreets(neighborhoodName) {
                   props.west_next_date,
                   props.west_until_date
                 );
-                calendarButton = `
-                  <a href="${calendarLink}" target="_blank" 
-                     style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; 
-                            text-decoration: none; padding: 8px 16px; border-radius: 4px; 
-                            font-size: 12px; font-weight: 600; transition: background 0.2s;"
-                     onmouseover="this.style.background='#3a4ba4'"
-                     onmouseout="this.style.background='#4A5BC4'">
-                    📅 Add to Calendar
-                  </a>
-                `;
+                calendarButton = `<a href="${calendarLink}" target="_blank" style="display: inline-block; margin-top: 8px; background: #4A5BC4; color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='#3a4ba4'" onmouseout="this.style.background='#4A5BC4'">📅 Add to Calendar</a>`;
               }
-
-              sections.push(`
-                <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
-                  <h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">West Side</h4>
-                  <div style="font-size: 13px;">
-                    <strong>Next:</strong> ${westNext}<br>
-                    <strong>Until:</strong> ${westUntil}
-                  </div>
-                  ${
-                    props.west_schedule
-                      ? `
-                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;">
-                      <strong>Pattern:</strong> ${
+              sections.push(
+                `<div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;"><h4 style="margin: 0 0 8px 0; color: #1a1a1a; font-size: 14px;">West Side</h4><div style="font-size: 13px;"><strong>Next:</strong> ${westNext}<br><strong>Until:</strong> ${westUntil}</div>${
+                  props.west_schedule
+                    ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #dee2e6; font-size: 12px; color: #6c757d;"><strong>Pattern:</strong> ${
                         props.west_schedule.frequency || ""
-                      } - ${props.west_schedule.day || ""} 
-                      ${
+                      } - ${props.west_schedule.day || ""} ${
                         props.west_schedule.week
                           ? "(" + props.west_schedule.week + " week)"
                           : ""
-                      }<br>
-                      <strong>Time:</strong> ${
+                      }<br><strong>Time:</strong> ${
                         props.west_schedule.start_time || ""
-                      } - ${props.west_schedule.end_time || ""}
-                    </div>
-                  `
-                      : ""
-                  }
-                  ${calendarButton}
-                </div>
-              `);
+                      } - ${props.west_schedule.end_time || ""}</div>`
+                    : ""
+                }${calendarButton}</div>`
+              );
             }
 
-            // If no sections were created, show a default message
             if (sections.length === 0) {
-              sections.push(`
-                <div style="background: #fff3cd; padding: 12px; border-radius: 6px; border-left: 4px solid #ffc107;">
-                  <p style="margin: 0; color: #856404; font-size: 13px;">
-                    No street sweeping schedule available for this street.
-                  </p>
-                </div>
-              `);
+              sections.push(
+                `<div style="background: #fff3cd; padding: 12px; border-radius: 6px; border-left: 4px solid #ffc107;"><p style="margin: 0; color: #856404; font-size: 13px;">No street sweeping schedule available for this street.</p></div>`
+              );
             }
 
-            var popupContent = `
-              <div style="font-family: Arial, sans-serif; max-width: 450px;">
-                <h3 style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 18px; border-bottom: 2px solid #4A5BC4; padding-bottom: 10px;">
-                  ${streetName}
-                </h3>
+            var popupContent = `<div style="font-family: Arial, sans-serif; max-width: 450px;"><h3 style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 18px; border-bottom: 2px solid #4A5BC4; padding-bottom: 10px;">${streetName}</h3>${sections.join(
+              ""
+            )}</div>`;
 
-                ${sections.join("")}
-              </div>
-            `;
-
-            L.popup({
-              maxWidth: 450,
-              className: "street-info-popup",
-            })
+            L.popup({ maxWidth: 450, className: "street-info-popup" })
               .setLatLng(e.latlng)
               .setContent(popupContent)
               .openOn(map);
@@ -715,18 +622,10 @@ function loadNeighborhoodStreets(neighborhoodName) {
 
           layer.on({
             mouseover: function (e) {
-              e.target.setStyle({
-                weight: 6,
-                opacity: 1,
-                fillOpacity: 0.25,
-              });
+              e.target.setStyle({ weight: 6, opacity: 1, fillOpacity: 0.25 });
             },
             mouseout: function (e) {
-              e.target.setStyle({
-                weight: 4,
-                opacity: 0.8,
-                fillOpacity: 0.15,
-              });
+              e.target.setStyle({ weight: 4, opacity: 0.8, fillOpacity: 0.15 });
             },
           });
         },
@@ -739,7 +638,7 @@ function loadNeighborhoodStreets(neighborhoodName) {
 }
 
 function loadNeighborhoods() {
-  fetch("/data/neighborhoods/LA_Times_Neighborhood_Boundaries.geojson")
+  fetch("/data/neighborhoods/Neighborhood_Boundaries.geojson")
     .then((response) => response.json())
     .then((data) => {
       if (neighborhoodLayer) {
@@ -761,26 +660,17 @@ function loadNeighborhoods() {
             feature.properties.name ||
             feature.properties.NAME ||
             "Unknown Neighborhood";
-
           layer.neighborhoodName = neighborhoodName;
 
           layer.originalMouseover = function (e) {
             if (selectedNeighborhood !== layer) {
-              layer.setStyle({
-                weight: 3,
-                opacity: 0.6,
-                fillOpacity: 0.3,
-              });
+              layer.setStyle({ weight: 3, opacity: 0.6, fillOpacity: 0.3 });
             }
           };
 
           layer.originalMouseout = function (e) {
             if (selectedNeighborhood !== layer) {
-              layer.setStyle({
-                weight: 0,
-                opacity: 0,
-                fillOpacity: 0.1,
-              });
+              layer.setStyle({ weight: 0, opacity: 0, fillOpacity: 0.1 });
             }
           };
 
@@ -794,70 +684,62 @@ function loadNeighborhoods() {
             mouseover: layer.originalMouseover,
             mouseout: layer.originalMouseout,
             click: function (e) {
+              // ==========================================================
+              // UPDATED LOGIC START
+              // ==========================================================
+
+              // If the user clicks inside the current selected neighborhood,
+              // do nothing. This prevents the "un-selection" and zoom-out.
               if (selectedNeighborhood === layer) {
-                layer.setStyle({
+                return;
+              }
+
+              // If a different neighborhood was already selected, reset its state
+              if (selectedNeighborhood) {
+                selectedNeighborhood.setStyle({
                   weight: 0,
                   opacity: 0,
                   fillOpacity: 0.1,
                 });
 
-                if (streetsLayer) {
-                  map.removeLayer(streetsLayer);
-                  streetsLayer = null;
-                }
+                selectedNeighborhood.on(
+                  "mouseover",
+                  selectedNeighborhood.originalMouseover
+                );
+                selectedNeighborhood.on(
+                  "mouseout",
+                  selectedNeighborhood.originalMouseout
+                );
 
-                layer.on("mouseover", layer.originalMouseover);
-                layer.on("mouseout", layer.originalMouseout);
-
-                layer.bindTooltip(layer.neighborhoodName, {
-                  permanent: false,
-                  direction: "center",
-                  className: "neighborhood-tooltip",
-                });
-
-                selectedNeighborhood = null;
-              } else {
-                if (selectedNeighborhood) {
-                  selectedNeighborhood.setStyle({
-                    weight: 0,
-                    opacity: 0,
-                    fillOpacity: 0.1,
-                  });
-
-                  selectedNeighborhood.on(
-                    "mouseover",
-                    selectedNeighborhood.originalMouseover
-                  );
-                  selectedNeighborhood.on(
-                    "mouseout",
-                    selectedNeighborhood.originalMouseout
-                  );
-
-                  selectedNeighborhood.bindTooltip(
-                    selectedNeighborhood.neighborhoodName,
-                    {
-                      permanent: false,
-                      direction: "center",
-                      className: "neighborhood-tooltip",
-                    }
-                  );
-                }
-
-                layer.closeTooltip();
-                layer.off("mouseover");
-                layer.off("mouseout");
-                layer.unbindTooltip();
-
-                layer.setStyle({
-                  weight: 3,
-                  opacity: 0.6,
-                  fillOpacity: 0.3,
-                });
-
-                selectedNeighborhood = layer;
-                map.fitBounds(layer.getBounds());
-                loadNeighborhoodStreets(neighborhoodName);
+                selectedNeighborhood.bindTooltip(
+                  selectedNeighborhood.neighborhoodName,
+                  {
+                    permanent: false,
+                    direction: "center",
+                    className: "neighborhood-tooltip",
+                  }
+                );
               }
+
+              // Set the new selected neighborhood
+              layer.closeTooltip();
+              layer.off("mouseover");
+              layer.off("mouseout");
+              layer.unbindTooltip();
+
+              layer.setStyle({
+                weight: 3,
+                opacity: 0.6,
+                fillOpacity: 0.3,
+              });
+
+              selectedNeighborhood = layer;
+              map.fitBounds(layer.getBounds());
+              loadNeighborhoodStreets(neighborhoodName);
+
+              // ==========================================================
+              // UPDATED LOGIC END
+              // ==========================================================
             },
           });
         },
