@@ -8,6 +8,8 @@ body {
   display: grid;
   grid-template-rows: auto 1fr;  /* Header = auto height, Map = rest */
   height: 100vh;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
 }
 
 .header {
@@ -16,23 +18,24 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 1rem;
+  padding: 1.5rem 1rem; /* Increased top/bottom padding */
   background: #fff;
   border-bottom: 1px solid #e5e7eb;
   text-align: center;
-  z-index: 1000;  
+  z-index: 1000;
+  /* Add safe area for notched devices */
+  padding-top: max(1.5rem, env(safe-area-inset-top));
 }
 
 .header h1 {
-  padding-top: 15px;
-  margin: 0 0 0rem 0;
-  font-size: 1.5rem;
+  margin: 0.5rem 0 0.25rem 0; /* Better spacing */
+  font-size: clamp(1.25rem, 4vw, 1.5rem); /* Responsive font size */
   font-weight: 600;
 }
 
 .header p {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 3vw, 0.875rem); /* Responsive font size */
   color: #6b7280;
 }
 
@@ -45,70 +48,149 @@ body {
   border: none;
   font-size: 3rem;
   cursor: pointer;
-  z-index: 1001;  /* ADD THIS - keeps button above everything */
+  z-index: 1001;
 }
 
 #map {
-  /* REMOVE fixed height, let grid handle it */
   width: 100%;
+  z-index: 1;
+  /* Ensure map takes remaining space */
+  min-height: 0;
+}
+
+/* Ensure Leaflet controls stay below sidebar */
+.leaflet-control-zoom {
+  z-index: 999 !important;
 }
 
 /* Hamburger Menu Icon */
 .menu-icon {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 2000;
+  position: fixed; /* Changed from absolute to fixed */
+  top: 1rem;
+  left: 1rem;
+  /* Add safe area for notched devices */
+  top: max(1rem, calc(env(safe-area-inset-top) + 0.5rem));
+  left: max(1rem, env(safe-area-inset-left));
+  z-index: 2999;
   cursor: pointer;
   background: white;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  padding: 0.625rem; /* 10px in rem */
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: opacity 0.3s, visibility 0.3s, transform 0.2s;
+  /* Ensure it's tappable on mobile */
+  min-width: 30px;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
+
+/* Active/pressed state for better mobile UX */
+.menu-icon:active {
+  transform: scale(0.95);
+}
+
+/* Hide hamburger when sidebar is active */
+.sidebar.active ~ .menu-icon,
+body:has(.sidebar.active) .menu-icon {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .bar {
-  width: 25px;
-  height: 3px;
+  width: 20px; /* Slightly smaller for better mobile appearance */
+  height: 2.5px;
   background-color: #333;
-  margin: 5px 0;
+  margin: 3px 0;
   transition: 0.4s;
+  border-radius: 2px;
 }
 
 /* Sidebar */
 .sidebar {
   height: 100%;
-  width: 250px;
+  width: 280px; /* Slightly wider for mobile */
+  max-width: 85vw; /* Don't take full width on mobile */
   position: fixed;
   z-index: 3000;
   top: 0;
-  left: -250px; /* Hidden by default */
+  left: -280px;
   background-color: #fff;
   overflow-x: hidden;
-  transition: 0.3s;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto; /* Allow scrolling if content is long */
+  transition: 0.3s ease-in-out;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.2);
+  /* Add safe areas for notched devices */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
+
 .sidebar.active {
   left: 0;
 }
+
 .sidebar-header {
-  padding: 20px;
+  padding: 1.25rem;
   background: #4A5BC4;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Add safe area for notched devices */
+  padding-top: max(1.25rem, calc(env(safe-area-inset-top) + 0.5rem));
 }
+
 .sidebar-links {
   list-style: none;
-  padding: 20px;
+  padding: 1.25rem;
+  margin: 0;
 }
+
 .sidebar-links li {
-  padding: 15px 0;
+  padding: 1rem 0;
   border-bottom: 1px solid #eee;
   cursor: pointer;
   font-weight: 500;
+  /* Ensure tappable area on mobile */
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
+
 .sidebar-links li:hover {
   color: #4A5BC4;
+}
+
+/* Active/pressed state for mobile */
+.sidebar-links li:active {
+  background-color: rgba(74, 91, 196, 0.1);
+}
+
+/* Sidebar button styles for accessibility */
+.sidebar-links button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  /* Ensure tappable area on mobile */
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-links button:hover {
+  color: #4A5BC4;
+}
+
+.sidebar-links button:active {
+  background-color: rgba(74, 91, 196, 0.1);
 }
 
 /* Modals */
@@ -121,37 +203,50 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,0.5);
+  /* Center content vertically on mobile */
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
+
 .modal-content {
   background-color: #fff;
-  margin: 15% auto;
-  padding: 30px;
-  border-radius: 8px;
-  width: 80%;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  width: 90%;
   max-width: 500px;
   position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
+  /* Better spacing on mobile */
+  margin: auto;
 }
 
 .close-modal, .close-sidebar {
-  /* Add these three lines */
   position: absolute;
-  top: 10px;
-  right: 20px;
-  
-  /* Keep your existing styles */
+  top: 0.75rem;
+  right: 1rem;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
-  color: #333; /* Optional: makes the 'x' a bit darker */
+  color: #333;
+  /* Ensure tappable on mobile */
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
-/* Optional: Add a hover effect to make it feel more interactive */
-.close-modal:hover {
+.close-modal:hover,
+.close-modal:active {
   color: #6b6868;
 }
 
-
-/* Background Overlay */
+/* Overlay */
 .overlay {
   display: none;
   position: fixed;
@@ -159,9 +254,80 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.4);
   z-index: 2500;
+  /* Prevent scrolling when overlay is active */
+  touch-action: none;
 }
+
 .overlay.active {
   display: block;
+}
+
+/* Prevent body scroll when sidebar is open */
+body:has(.sidebar.active) {
+  overflow: hidden;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .header {
+    padding: 1.25rem 1rem;
+  }
+  
+  .header h1 {
+    font-size: 1.25rem;
+  }
+  
+  .header p {
+    font-size: 0.8125rem;
+  }
+  
+  .sidebar {
+    width: 280px;
+  }
+  
+  .modal-content {
+    width: 95%;
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 375px) {
+  .header h1 {
+    font-size: 1.125rem;
+  }
+  
+  .header p {
+    font-size: 0.75rem;
+  }
+  
+  .menu-icon {
+    padding: 0.5rem;
+  }
+  
+  .bar {
+    width: 18px;
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .header h1 {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+  }
+  
+  .header p {
+    font-size: 0.75rem;
+  }
+  
+  .menu-icon {
+    top: 0.5rem;
+  }
 }
